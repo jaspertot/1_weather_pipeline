@@ -4,3 +4,4 @@
 *.csv
 !ingestion/cities.csv
 __pycache__
+*.pyc
