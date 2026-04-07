@@ -5,13 +5,14 @@ from datetime import datetime
 
 # Path definition
 log_path = os.path.join(os.path.dirname(__file__), '..', 'logs', 'ingestion.log')
-raw_path = output_path = os.path.join(os.path.dirname(__file__), '..', 'raw_data', '*.csv')
+raw_path = output_path = os.path.join(os.path.dirname(__file__), '..', 'raw_data', 'raw_weather_*.csv')
 
 duplicates = 0
 # Points to log file
 logger.add(log_path)
 
 def clean_data():
+    # Takes the most recent file from the raw_data directory
     list_of_files = glob.glob(raw_path) 
     latest_file_path = max(list_of_files, key=os.path.getctime)
     latest_file = os.path.basename(latest_file_path)
@@ -63,4 +64,3 @@ def clean_data():
     logger.info(f'After dropping duplicates, the dataframe has {len(df)} rows')
     
     return df
-
