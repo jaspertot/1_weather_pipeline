@@ -3,3 +3,4 @@
 *.log
 *.csv
 !ingestion/cities.csv
+__pycache__
