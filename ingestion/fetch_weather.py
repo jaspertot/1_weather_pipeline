@@ -13,7 +13,11 @@ current_datetime = timestamp = datetime.now().strftime('%d%m%Y_%H%M%S')
 city_data = {} # Dictionary populated from cities.csv
 final_data = []
 
-logger.add('../logs/ingestion.log')
+log_path = os.path.join(os.path.dirname(__file__), '..', 'logs', 'ingestion.log')
+csv_path = os.path.join(os.path.dirname(__file__), 'cities.csv')
+output_path = os.path.join(os.path.dirname(__file__), '..', 'raw_data', f'raw_weather_{current_datetime}.csv')
+
+logger.add(log_path)
 
 def current_weather(lat, lon):
     r=requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appId={api_key}')
@@ -73,7 +77,7 @@ logger.info('Data Ingestion Started.')
 # Context Manager to retrieve cities, lat, and lon in the cities.csv file
 
 try:
-    with open('cities.csv', 'r', encoding='utf-8') as c_file: # c_file -> cities file
+    with open(csv_path, 'r', encoding='utf-8') as c_file: # c_file -> cities file
         reader = csv.DictReader(c_file)  # Reads first row as headers
         for row in reader:
             city = row['City']
@@ -106,10 +110,10 @@ for city in city_data.keys():
 logger.success('Final list prepared. Ready for saving.')
 
 # Open context manager to write
-with open(f'../raw_data/raw_weather_{current_datetime}.csv', 'w', newline='', encoding='utf-8') as file:
+with open(output_path, 'w', newline='', encoding='utf-8') as file:
     writer = csv.DictWriter(file, fieldnames=final_data[0].keys())
     writer.writeheader()  # Write column names
     writer.writerows(final_data)
-    logger.success(f'raw_weather_{current_datetime} successfully saved! Ingestion')
+    logger.success(f'raw_weather_{current_datetime} successfully saved!')
 
 logger.info('Data Ingestion Completed.')
