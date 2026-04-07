@@ -12,4 +12,4 @@ df = clean_data()
 df = enrich_data(df)
 
 df.to_csv(output_path, index=False, encoding='utf-8')
-logger.success('transformed_weather_timestamp.csv successfully saved!')
+logger.success(f'transformed_weather_{current_datetime}.csv successfully saved!')
