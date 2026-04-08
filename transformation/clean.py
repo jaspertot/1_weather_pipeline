@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Path definition
 log_path = os.path.join(os.path.dirname(__file__), '..', 'logs', 'ingestion.log')
-raw_path = output_path = os.path.join(os.path.dirname(__file__), '..', 'raw_data', 'raw_weather_*.csv')
+raw_path = os.path.join(os.path.dirname(__file__), '..', 'raw_data', 'raw_weather_*.csv')
 
 duplicates = 0
 # Points to log file
