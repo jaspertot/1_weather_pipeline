@@ -101,6 +101,7 @@ for city in city_data.keys():
     logger.info("Flattened JSON cleaned.")
 
     final = extract_details(cleaned_flat)
+    final['fetched_at'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+00:00')
     final_data.append(final)
     
     if final.get("wind_gust") is None:

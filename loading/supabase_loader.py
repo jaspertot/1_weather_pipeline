@@ -1,4 +1,4 @@
-import os, glob, boto3
+import os, glob, boto3, math
 import pandas as pd
 
 from botocore.exceptions import ClientError
@@ -66,12 +66,15 @@ def upload_to_s3(client, fromPath, bucket, toPath):
     client.upload_file(fromPath, bucket, toPath) # Upload raw file
     logger.success(f'File successfull uploaded to {toPath}.')
 
-# def insert_into_supabase(client, filepath, table_name):
-#     df = pd.read_csv(filepath)
-#     df = df.where(pd.notnull(df), None)
-#     data = df.to_dict(orient='records')
+def insert_into_supabase(client, filepath, table_name):
+    df = pd.read_csv(filepath)
+    data = df.to_dict(orient='records')
+    clean_data = [
+        {k: (None if isinstance(v, float) and math.isnan(v) else v) for k, v in row.items()}
+        for row in data
+    ]
 
-#     client.table(table_name).insert(data).execute()
+    client.table(table_name).insert(clean_data).execute()
 
 
 def main():
@@ -96,7 +99,11 @@ def main():
     upload_to_s3(s3_client, latest_trns_fp, bucket, trns_obj)   # Upload transformed file
 
     # INSERT INTO Supabase
-    # insert_into_supabase(supabase_client, latest_trns_fp, 'weather_transformed')
+    insert_into_supabase(supabase_client, latest_trns_fp, 'weather_transformed')
+    logger.success('Records successfully inserted to weather_transformed table.')
+    insert_into_supabase(supabase_client, latest_raw_fp, 'raw_weather')
+    logger.success('Records successfully inserted to raw_weather table.')
+
     
 if __name__ == "__main__":
     main()

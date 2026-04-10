@@ -10,7 +10,7 @@ def enrich_data(dataframe):
     # Convert temp from Kelvin to Celsius
     df['temp_celsius'] = df['temp_kelvin'] - 273.15
     df['feels_like_celsius'] = df['feels_like_kelvin'] - 273.15
-    df['temp_farenheit'] = (df['temp_celsius']*(9/5)) + 32
+    df['temp_fahrenheit'] = (df['temp_celsius']*(9/5)) + 32
     logger.info('Converted temperature columns were created.')
 
     # Heat Index: Simplified Formula
@@ -25,9 +25,10 @@ def enrich_data(dataframe):
     df['month'] = df['dt_utc'].dt.month
     logger.info('Parsed timestamp columns were created.')
 
-    # Converting sunrise and sunset from UNIX timestamps to UTC datetime
-    df['sunrise'] = pd.to_datetime(df['sunrise'], unit='s', utc=True)
-    df['sunset'] = pd.to_datetime(df['sunset'], unit='s', utc=True)
+    # Converting timestamps to supabase compatible timestamp
+    df['dt_utc'] = pd.to_datetime(df['dt'], unit='s', utc=True).dt.strftime('%Y-%m-%dT%H:%M:%S+00:00')
+    df['sunrise'] = pd.to_datetime(df['sunrise'], unit='s', utc=True).dt.strftime('%Y-%m-%dT%H:%M:%S+00:00')
+    df['sunset'] = pd.to_datetime(df['sunset'], unit='s', utc=True).dt.strftime('%Y-%m-%dT%H:%M:%S+00:00')
     logger.info('Sunrise and sunset columns were converted to UTC timestamp.')
 
     # Drop Kelvin-related and dt columns
@@ -35,4 +36,5 @@ def enrich_data(dataframe):
     df = df.drop(columns=drop_columns)
     logger.info('Dropped Kelvin-related and dt columns')
 
+    df = df.where(pd.notnull(df), other=None)
     return df
