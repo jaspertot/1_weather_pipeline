@@ -74,47 +74,50 @@ def extract_details(clean_json):
 
 logger.info('Data Ingestion Started.')
 
-# Context Manager to retrieve cities, lat, and lon in the cities.csv file
+def main():
+    # Context Manager to retrieve cities, lat, and lon in the cities.csv file
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as c_file: # c_file -> cities file
+            reader = csv.DictReader(c_file)  # Reads first row as headers
+            for row in reader:
+                city = row['City']
+                city_data[city] = {
+                    'lat': float(row['Lat']),
+                    'lon': float(row['Lon'])
+                }
+    except Exception:
+        logger.critical("cities.csv not found — cannot proceed")
+        sys.exit()       
 
-try:
-    with open(csv_path, 'r', encoding='utf-8') as c_file: # c_file -> cities file
-        reader = csv.DictReader(c_file)  # Reads first row as headers
-        for row in reader:
-            city = row['City']
-            city_data[city] = {
-                'lat': float(row['Lat']),
-                'lon': float(row['Lon'])
-            }
-except Exception:
-    logger.critical("cities.csv not found — cannot proceed")
-    sys.exit()       
+    if not api_key:
+        logger.critical("API key missing from .env — cannot proceed")
+        sys.exit()
 
-if not api_key:
-    logger.critical("API key missing from .env — cannot proceed")
-    sys.exit()
+    for city in city_data.keys():
+        flattened_json = current_weather(city_data[city]['lat'], city_data[city]['lon'])
+        logger.info(f'Retrieved weather data from the API for {city}.')
 
-for city in city_data.keys():
-    flattened_json = current_weather(city_data[city]['lat'], city_data[city]['lon'])
-    logger.info(f'Retrieved weather data from the API for {city}.')
+        cleaned_flat = clean_json(flattened_json)
+        logger.info("Flattened JSON cleaned.")
 
-    cleaned_flat = clean_json(flattened_json)
-    logger.info("Flattened JSON cleaned.")
+        final = extract_details(cleaned_flat)
+        final['fetched_at'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+00:00')
+        final_data.append(final)
+        
+        if final.get("wind_gust") is None:
+            logger.warning(f"wind_gust missing for {city} — defaulting to None")
+        logger.success(f'Required columns successfully extracted for {city}.')
+        
+    logger.success('Final list prepared. Ready for saving.')
 
-    final = extract_details(cleaned_flat)
-    final['fetched_at'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+00:00')
-    final_data.append(final)
-    
-    if final.get("wind_gust") is None:
-        logger.warning(f"wind_gust missing for {city} — defaulting to None")
-    logger.success(f'Required columns successfully extracted for {city}.')
-    
-logger.success('Final list prepared. Ready for saving.')
+    # Open context manager to write
+    with open(output_path, 'w', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=final_data[0].keys())
+        writer.writeheader()  # Write column names
+        writer.writerows(final_data)
+        logger.success(f'raw_weather_{current_datetime} successfully saved!')
 
-# Open context manager to write
-with open(output_path, 'w', newline='', encoding='utf-8') as file:
-    writer = csv.DictWriter(file, fieldnames=final_data[0].keys())
-    writer.writeheader()  # Write column names
-    writer.writerows(final_data)
-    logger.success(f'raw_weather_{current_datetime} successfully saved!')
+    logger.info('Data Ingestion Completed.')
 
-logger.info('Data Ingestion Completed.')
+if __name__ == "__main__":
+    main()

@@ -1,4 +1,5 @@
 .venv/
+.venv_wsl/
 .env
 .vscode/
 *.log
@@ -6,3 +7,7 @@
 !ingestion/cities.csv
 __pycache__
 *.pyc
+airflow.cfg
+airflow.db*
+simple_auth_manager_passwords.json.generated
+*.json.generated
