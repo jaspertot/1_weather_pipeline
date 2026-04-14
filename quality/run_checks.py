@@ -120,9 +120,11 @@ def main():
 
     if run_all_checks(df, expected_rows):
         logger.success('Quality check successful!')
+        return True
     
     else:
         logger.error('Error encountered during quality check.')
+        return False
 
 
 if __name__ == "__main__":

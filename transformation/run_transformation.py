@@ -1,7 +1,7 @@
 import os
-from clean import clean_data
+from transformation.clean import clean_data
 from datetime import datetime
-from enrich import enrich_data
+from transformation.enrich import enrich_data
 from loguru import logger
 
 current_datetime = timestamp = datetime.now().strftime('%d%m%Y_%H%M%S')
