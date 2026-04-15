@@ -104,6 +104,9 @@ def main():
     insert_into_supabase(supabase_client, latest_raw_fp, 'raw_weather')
     logger.success('Records successfully inserted to raw_weather table.')
 
+    # Removing the files in the local
+    os.remove(latest_raw_fp)
+    os.remove(latest_trns_fp)
     
 if __name__ == "__main__":
     main()

@@ -33,7 +33,7 @@ default_args = {
 'depends_on_past': False,  # Tasks don't depend on previous runs
 'retries': 3,  # Number of retry attempts if a task fails
 'retry_delay': timedelta(minutes=5),  # Wait 5 minutes between retries
-'start_date': datetime(2026, 4, 11),  # When the DAG should start
+'start_date': datetime(2026, 4, 15),  # When the DAG should start
 'email_on_failure': True,  # Send email on task failure
 'email_on_retry': False,  # Don't send email on retry
 'email': ['jaspercasile14@gmail.com'],  # Where to send notifications
@@ -45,7 +45,7 @@ dag = DAG(
     dag_id='weather_pipeline',
     default_args=default_args,
     description='ETL Pipeline from OpenWeather API.',
-    schedule='*/2 * * * *', 
+    schedule='*/15 * * * *',
     catchup=False,  # Don't run for past dates when DAG is unpaused
     max_active_runs=1,  # Only run one instance at a time (prevents overlaps)
     tags=['weather', 'pipeline', 'etl'], 
@@ -69,7 +69,7 @@ transform_task = PythonOperator(
 
 quality_task = PythonOperator(
     task_id='quality_check_data',
-    python_callable=qc,
+    python_callable=run_quality_checks,
     dag=dag,
     # provide_context=True # Check the run_quality_checks function above. To be used in the parameter
 )
