@@ -65,7 +65,7 @@ def get_humidity_comparison(client, table, limit):
     try:
         response = (
             client.table(table)
-            .select('city, humidity, dt_utc, fetched_at')
+            .select('city, humidity, dt_utc, weather_main, fetched_at')
             .order('fetched_at', desc=True)
             .order('city')
             .limit(limit) #Adjust accordingly if cities were to be added in ingestion/cities.csv
