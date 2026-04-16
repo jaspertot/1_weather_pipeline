@@ -12,3 +12,9 @@ For airflow, please setup:
 --> Install dependencies
     pip install -r .req/requirements.txt
 --> For Airflow setup, run `airflow_setup.sh`
+
+
+About time:
+- Supabase seems to automatically convert the value to UTC (+00:00)
+- This works with the timestamp values from the API (like dt, dt_utc, sunset, sunrise etc.)
+- This becomes a problem, however, with the fetched_at since it retrievese the timestamp from the local machine (+08:00)

@@ -47,7 +47,7 @@ def clean_data():
     logger.info("Null values were handled.")
 
     # Adding fetched_at column
-    df['fetched_at'] = datetime.now()
+    df['fetched_at'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+08:00')
     logger.info("'fetched_at' column is created.")
 
     # Convert some columns to their respective dtypes

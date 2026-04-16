@@ -16,11 +16,20 @@ key = os.getenv('SUPABASE_PUBLIC_KEY')
 
 supabase_client = get_supabase_client(url, key)
 
-def get_latest_readings(client, limit):
+def get_distinct_count(client, table, column):
+    response = (
+        client.table(table)
+        .select(column)
+        .execute()
+    )
 
+    unique_values = set([row[column] for row in response.data])
+    return len(unique_values)
+
+def get_latest_readings(client, table, limit):
     try:
         response = (
-            client.table('weather_transformed')
+            client.table(table)
             .select('*')
             .order('fetched_at', desc=True)
             .order('city')
@@ -36,11 +45,11 @@ def get_latest_readings(client, limit):
         return []
 
 
-def get_temperature_history(client, city=None):
-    day_ago = datetime.now - timedelta(hours=24)
+def get_temperature_history(client, table, city=None):
+    day_ago = datetime.now() - timedelta(hours=24)
     query = (
-        client.table('weather_transformed')
-        .select('temp_celsius, temp_fahrenheit')
+        client.table(table)
+        .select('city, temp_celsius, temp_fahrenheit, dt_utc, fetched_at')
         .gte('fetched_at', day_ago.isoformat())
         .order('fetched_at')
     )
@@ -51,15 +60,39 @@ def get_temperature_history(client, city=None):
     response = query.execute()
 
     return response.data
+
+def get_humidity_comparison(client, table, limit):
+    try:
+        response = (
+            client.table(table)
+            .select('city, humidity, dt_utc, fetched_at')
+            .order('fetched_at', desc=True)
+            .order('city')
+            .limit(limit) #Adjust accordingly if cities were to be added in ingestion/cities.csv
+            .execute()
+        )
+
+        logger.info('Successfully retrieved the latest humidity readings.')
+        return response.data
     
+    except Exception as e:
+        logger.error(f'Error retrieving latest humidity readings. Error: {e}')
+        return []
+    
+def get_all_cities(client, table):
+    try:
+        # Query all city values
+        response = (
+            client.table(table)
+            .select('city')
+            .execute()
+        )
 
+        unique_cities = list(set([row['city'] for row in response.data]))
+        unique_cities.sort()
 
-
-latest_readings= get_latest_readings(supabase_client, 10) # 10 == number of cities that we have so far in ingestion/cities.csv
-
-for record in latest_readings:
-    print(f"City: {record['city']}, Fetched at: {record['fetched_at']}")
-
-
-
-
+        return unique_cities
+    
+    except Exception as e:
+        print(f"Error fetching cities: {e}")
+        return []

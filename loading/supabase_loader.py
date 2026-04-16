@@ -14,8 +14,6 @@ logger.add(log_path)
 raw_path  = os.path.join(os.path.dirname(__file__), '..', 'raw_data', 'raw_weather_*.csv')
 transformed_path = os.path.join(os.path.dirname(__file__), '..', 'raw_data', 'transformed_weather_*.csv')
 
-current_datetime = timestamp = datetime.now().strftime('%d%m%Y_%H%M%S')
-
 def validate_aws_credentials():
     
     """Validate that AWS credentials are properly configured"""
