@@ -40,6 +40,13 @@ date_range = st.sidebar.date_input(
 st.sidebar.markdown('---')
 st.sidebar.caption('Weather Pipeline by Jasper Casile')
 
+auto_refresh = st.sidebar.toggle("Auto-refresh every 5 minutes", value=False)
+
+if auto_refresh:
+    import time
+    time.sleep(300)
+    st.rerun()
+    
 # Latest readings for each city
 latest_df = pd.DataFrame(q.get_latest_readings(supabase_client, table, num_unique_city))
 
@@ -210,10 +217,3 @@ st.dataframe(
 )
 
 st.markdown("---")
-
-auto_refresh = st.sidebar.toggle("Auto-refresh every 5 minutes", value=False)
-
-if auto_refresh:
-    import time
-    time.sleep(300)
-    st.rerun()
