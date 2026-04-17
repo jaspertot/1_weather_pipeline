@@ -5,12 +5,12 @@ For airflow, please setup:
     sudo apt update
     sudo apt install python3 python3-pip python3-venv -y
 --> Create new virtual environment compatible for WSL
-    python3 -m venv .venv_wsl
+    python3 -m venv .venv
 --> Ensure that you put the newly created virtual environment to .gitignore
 --> Activate the virtual environment
-    source .venv_wsl/bin/activate
+    source .venv/bin/activate
 --> Install dependencies
-    pip install -r .req/requirements.txt
+    pip install -r requirements.txt
 --> For Airflow setup, run `airflow_setup.sh`
 
 
