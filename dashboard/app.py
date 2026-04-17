@@ -172,7 +172,7 @@ with col_left:
     )
 
     bar_fig.update_layout(height=400)
-    st.plotly_chart(bar_fig, use_container_width=True)
+    st.plotly_chart(bar_fig, width='stretch')
 
 with col_right:
     st.subheader('Heat Index Comparison')
@@ -192,7 +192,7 @@ with col_right:
     )
 
     heat_fig.update_layout(height=400)
-    st.plotly_chart(heat_fig, use_container_width=True)
+    st.plotly_chart(heat_fig, width='stretch')
 
 st.markdown('---')
 
@@ -205,7 +205,7 @@ display_cols = [
 
 st.dataframe(
     latest_df[display_cols].sort_values("temp_celsius", ascending=False),
-    use_container_width=True,
+    width='stretch',
     hide_index=True
 )
 
