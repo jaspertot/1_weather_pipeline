@@ -11,3 +11,5 @@ airflow.cfg
 airflow.db*
 simple_auth_manager_passwords.json.generated
 *.json.generated
+ec2*.sh
+.ec2_setup_script/
