@@ -3,9 +3,12 @@
 ## Overview
 An end-to-end data engineering pipeline that collects real-time weather data from 10 cities across Asia and the world, processes and enriches it, stores it in the cloud, and visualizes it through an interactive dashboard. Built as a beginner data engineering portfolio project covering all core DE concepts from ingestion to deployment.
 
-**Live Dashboard:** [https://weatherpipeline-jasper.streamlit.app/]
+**Live Dashboard:** https://weatherpipeline-jasper.streamlit.app/
 
 ![Dashboard Screenshot](docs/images/dashboard.png)
+![Dashboard Screenshot](docs/images/dashboard2.png)
+![Dashboard Screenshot](docs/images/dashboard3.png)
+![Dashboard Screenshot](docs/images/dashboard4.png)
 
 ---
 
