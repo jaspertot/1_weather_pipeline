@@ -214,7 +214,7 @@ See [docs/data_dictionary.md](docs/data_dictionary.md) for full column definitio
 
 **Jasper Riley Casile**\
 *Tech Specialist*
-- GitHub: [https://github.com/jaspertot]
-- LinkedIn: [https://www.linkedin.com/in/jasper-casile-587488273/]
+- GitHub: https://github.com/jaspertot
+- LinkedIn: https://www.linkedin.com/in/jasper-casile-587488273/
 
 ---
