@@ -1,5 +1,7 @@
 # Weather Data Pipeline
 
+`Note:` The EC2 instance for the Airflow server was terminated on `2026-04-20 14:00:00+08`. The data on the Streamlit dashboard may not reflect real-time values. This is to save AWS free credits for other projects.
+
 ## Overview
 An end-to-end data engineering pipeline that collects real-time weather data from 10 cities across Asia and the world, processes and enriches it, stores it in the cloud, and visualizes it through an interactive dashboard. Built as a beginner data engineering portfolio project covering all core DE concepts from ingestion to deployment.
 
