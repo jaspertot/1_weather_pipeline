@@ -19,7 +19,7 @@ st.set_page_config(
 )
 
 st.title(':cloud: Weather Pipeline')
-st.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S+08:00')}")
+st.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S+00:00')}")
 
 # Sidebar Filter
 st.sidebar.header('Filters')
